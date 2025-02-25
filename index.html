@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Repo to GitHub Pages Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212; /* Dark background */
+            color: #e0e0e0; /* Light text color */
+            padding: 20px;
+            margin: 0;
+        }
+        h1 {
+            color: #ffffff; /* White text for the header */
+        }
+        input[type="text"], button {
+            padding: 10px;
+            margin-top: 10px;
+            width: 100%; /* Full width for mobile */
+            box-sizing: border-box; /* Include padding in width */
+        }
+        button {
+            background-color: #6200ea; /* Purple background */
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px; /* Margin above button */
+        }
+        button:hover {
+            background-color: #3700b3; /* Darker purple on hover */
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #bb86fc; /* Light purple for the result */
+        }
+        @media (min-width: 600px) {
+            input[type="text"], button {
+                width: 300px; /* Fixed width for larger screens */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>GitHub Repo to GitHub Pages Converter</h1>
+    <p>Enter a GitHub repository link:</p>
+    <input type="text" id="repoUrl" placeholder="https://github.com/username/repo">
+    <button id="convertButton">Convert</button>
+    <button id="copyButton" style="display: none;">Copy</button>
+    
+    <div class="result" id="result"></div>
+
+    <script>
+        document.getElementById('convertButton').addEventListener('click', function() {
+            const repoUrl = document.getElementById('repoUrl').value;
+            const resultDiv = document.getElementById('result');
+            const copyButton = document.getElementById('copyButton');
+            const regex = /https:\/\/github\.com\/([^\/]+)\/([^\/]+)/;
+            const match = repoUrl.match(regex);
+            if (match) {
+                const username = match[1];
+                const repoName = match[2];
+                const gitpagesUrl = `https://${username}.github.io/${repoName}/`;
+                resultDiv.textContent = `GitHub Pages Link: ${gitpagesUrl}`;
+                copyButton.style.display = 'inline-block'; // Show the copy button
+            } else {
+                resultDiv.textContent = 'Invalid GitHub repository link. Please try again.';
+                copyButton.style.display = 'none'; // Hide the copy button
+            }
+        });
+
+        document.getElementById('copyButton').addEventListener('click', function() {
+            const resultText = document.getElementById('result').textContent.replace('GitHub Pages Link: ', '');
+            navigator.clipboard.writeText(resultText)
+                .then(() => {
+                    alert('Link copied to clipboard!');
+                })
+                .catch(err => {
+                    alert('Failed to copy: ', err);
+                });
+        });
+    </script>
+
+</body>
+</html>
